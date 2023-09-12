@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpc-ws2019
+  labels:
+    app: hpc-ws2019
+spec:
+  selector:
+    matchLabels:
+      app: hpc-ws2019
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hpc-ws2019
+    spec:
+      securityContext:
+        windowsOptions:
+          hostProcess: true
+          runAsUserName: "NT AUTHORITY\\SYSTEM"
+      hostNetwork: true
+      containers:
+      - name: hpc-ws2019
+        image: mcr.microsoft.com/windows/servercore:ltsc2019
+        args:
+        - powershell.exe
+        - -Command
+        - "New-Item -ItemType Directory -Path C:\\nodelogs; cd C:\\nodelogs; C:\\k\\debug\\collect-windows-logs.ps1; Start-Sleep 16800"
+        imagePullPolicy: IfNotPresent
+      nodeSelector:
+        kubernetes.io/os: windows

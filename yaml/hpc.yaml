@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpc-agnhost
+  labels:
+    app: hpc-agnhost
+spec:
+  selector:
+    matchLabels:
+      app: hpc-agnhost
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hpc-agnhost
+    spec:
+      securityContext:
+        windowsOptions:
+          hostProcess: true
+          runAsUserName: "NT AUTHORITY\\SYSTEM"
+      hostNetwork: true
+      containers:
+      - name: hpc-agnhost
+        image: registry.k8s.io/e2e-test-images/agnhost:2.40
+        command: ["%CONTAINER_SANDBOX_MOUNT_POINT%/agnhost"]
+        args: ["pause"]
+        imagePullPolicy: IfNotPresent
+      nodeSelector:
+        kubernetes.io/os: windows
