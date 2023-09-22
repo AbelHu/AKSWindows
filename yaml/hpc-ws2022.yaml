@@ -29,3 +29,8 @@ spec:
         imagePullPolicy: IfNotPresent
       nodeSelector:
         kubernetes.io/os: windows
+        # kubernetes.io/hostname: "akswin22000001"
+      # tolerations:
+      # - key: "node.kubernetes.io/unschedulable"
+      #  operator: "Equal"
+      #  effect: "NoSchedule"
